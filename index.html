@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>savefity.net</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .top-header {
+            background-color: #1a73e8;
+            padding: 14px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-bottom: 3px solid #0d47a1;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .site-name {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 22px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger:hover {
+            transform: scale(1.1);
+        }
+
+        .hamburger .line {
+            width: 100%;
+            height: 3.5px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active .line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active .line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .line:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: #ffffff;
+            min-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            padding: 10px 0;
+            z-index: 999;
+            border: 1px solid #e0e0e0;
+        }
+
+        .dropdown-menu.open {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f1f5f9;
+            color: #1a73e8;
+        }
+
+        .dropdown-menu a.active-platform {
+            background: #1a73e8;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .dropdown-menu a.active-platform:hover {
+            background: #1557b0;
+        }
+
+        .dropdown-menu .menu-divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 6px 0;
+        }
+
+        .link-box {
+            max-width: 600px;
+            margin: 40px auto 20px auto;
+            padding: 20px 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .link-box label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .link-box .selected-platform-label {
+            display: block;
+            font-size: 14px;
+            color: #1a73e8;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .link-box input[type="url"] {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 16px;
+            border: 2px solid #d0d0d0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background: #fafafa;
+            margin-bottom: 15px;
+        }
+
+        .link-box input[type="url"]:focus {
+            border-color: #1a73e8;
+            background: #ffffff;
+        }
+
+        .link-box input[type="url"]::placeholder {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .link-box .paste-btn {
+            width: 100%;
+            padding: 10px 18px;
+            background-color: #34a853;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .link-box .paste-btn:hover {
+            background-color: #2d8e47;
+        }
+
+        .link-box .download-btn {
+            width: 100%;
+            padding: 10px 18px;
+            background-color: #1a73e8;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .link-box .download-btn:hover {
+            background-color: #1557b0;
+        }
+
+        .about-section {
+            max-width: 600px;
+            margin: 20px auto 40px auto;
+            padding: 20px 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-size: 20px;
+            color: #1a73e8;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .about-section p {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .supported-badges {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .supported-badges span {
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .supported-badges span:hover {
+            transform: scale(1.05);
+        }
+
+        .supported-badges span.active-badge {
+            background: #1a73e8;
+            color: #ffffff;
+        }
+
+        .contact-detail {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a73e8;
+        }
+
+        .contact-detail-small {
+            margin-top: 6px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .contact-sub {
+            margin-top: 4px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        @media (max-width: 480px) {
+            .site-name {
+                font-size: 18px;
+            }
+            .hamburger {
+                width: 26px;
+                height: 19px;
+            }
+            .hamburger .line {
+                height: 3px;
+            }
+            .link-box,
+            .about-section {
+                margin-left: 15px;
+                margin-right: 15px;
+                padding: 15px 18px;
+            }
+            .dropdown-menu {
+                min-width: 170px;
+                right: 0;
+                top: 48px;
+            }
+            .dropdown-menu a {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            .supported-badges span {
+                font-size: 11px;
+                padding: 3px 10px;
+            }
+            .contact-detail {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="top-header">
+        <a href="#" class="site-name">savefity.net</a>
+
+        <div class="header-right">
+            <div class="hamburger" id="menuToggle">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </div>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="#" data-platform="youtube">▶️ YouTube</a>
+                <a href="#" data-platform="tiktok">📱 TikTok</a>
+                <a href="#" data-platform="instagram">📸 Instagram</a>
+                <a href="#" data-platform="facebook">📘 Facebook</a>
+                <a href="#" data-platform="twitter">🐦 Twitter</a>
+
+                <div class="menu-divider"></div>
+
+                <a href="#about">ℹ️ About</a>
+                <a href="#contact">📧 Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== LINK BOX ===== -->
+    <div class="link-box" id="home">
+        <label for="linkInput">Paste your video link here</label>
+        <span class="selected-platform-label" id="selectedPlatformLabel">📌 Selected: YouTube</span>
+        <input type="url" id="linkInput" placeholder="https://youtube.com/watch?v=..." />
+
+        <div class="supported-badges" id="badgeContainer">
+            <span class="active-badge" data-platform="youtube">▶️ YouTube</span>
+            <span data-platform="tiktok">📱 TikTok</span>
+            <span data-platform="instagram">📸 Instagram</span>
+            <span data-platform="facebook">📘 Facebook</span>
+            <span data-platform="twitter">🐦 Twitter</span>
+        </div>
+
+        <div class="btn-group">
+            <button class="paste-btn" id="pasteBtn">📋 Paste</button>
+            <button class="download-btn" id="downloadBtn">⬇ Download</button>
+        </div>
+    </div>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <div class="about-section" id="about">
+        <h2>About savefity.net</h2>
+        <p>
+            This tool is designed to help you download videos from popular social media
+            platforms quickly and effortlessly. Simply paste the video link and save it
+            directly to your device.
+        </p>
+        <div class="supported-badges">
+            <span>▶️ YouTube</span>
+            <span>📱 TikTok</span>
+            <span>📸 Instagram</span>
+            <span>📘 Facebook</span>
+            <span>🐦 Twitter</span>
+        </div>
+    </div>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <div class="about-section" id="contact" style="margin-top: 0">
+        <h2>📧 Contact Us</h2>
+        <p>Have questions or suggestions? Reach out to us at:</p>
+
+        <div class="contact-detail">
+            📧 <strong>axionorvex@gmail.com</strong>
+        </div>
+        <div class="contact-detail" style="margin-top: 6px; font-size: 17px;">
+            📧 <strong>patrukumar2008@gmail.com</strong>
+        </div>
+
+        <div class="contact-detail-small">
+            📸 Instagram: <strong style="color: #1a73e8">@callmepatru</strong>
+        </div>
+
+        <div class="contact-sub">(We'll get back to you within 24 hours)</div>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        const platforms = {
+            youtube: {
+                label: 'YouTube',
+                icon: '▶️',
+                placeholder: 'https://youtube.com/watch?v=...',
+                domains: ['youtube.com', 'youtu.be'],
+                downloadUrl: (link) => 'https://www.y2mate.com/search/' + encodeURIComponent(link)
+            },
+            tiktok: {
+                label: 'TikTok',
+                icon: '📱',
+                placeholder: 'https://tiktok.com/@username/video/...',
+                domains: ['tiktok.com'],
+                downloadUrl: (link) => 'https://ssstik.io/en?url=' + encodeURIComponent(link)
+            },
+            instagram: {
+                label: 'Instagram',
+                icon: '📸',
+                placeholder: 'https://instagram.com/p/...',
+                domains: ['instagram.com'],
+                downloadUrl: (link) => 'https://snapinsta.app/' + encodeURIComponent(link)
+            },
+            facebook: {
+                label: 'Facebook',
+                icon: '📘',
+                placeholder: 'https://facebook.com/watch/...',
+                domains: ['facebook.com', 'fb.watch'],
+                downloadUrl: (link) => 'https://getfvid.com/downloader?url=' + encodeURIComponent(link)
+            },
+            twitter: {
+                label: 'Twitter',
+                icon: '🐦',
+                placeholder: 'https://twitter.com/...',
+                domains: ['twitter.com', 'x.com'],
+                downloadUrl: (link) => 'https://twdown.net/download.php?url=' + encodeURIComponent(link)
+            }
+        };
+
+        let currentPlatform = 'youtube';
+
+        const linkInput = document.getElementById('linkInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const pasteBtn = document.getElementById('pasteBtn');
+        const hamburger = document.getElementById('menuToggle');
+        const dropdown = document.getElementById('dropdownMenu');
+        const selectedLabel = document.getElementById('selectedPlatformLabel');
+        const badgeContainer = document.getElementById('badgeContainer');
+
+        function setPlatform(platformKey) {
+            currentPlatform = platformKey;
+            const platform = platforms[platformKey];
+            if (!platform) return;
+
+            linkInput.placeholder = platform.placeholder;
+            selectedLabel.textContent = '📌 Selected: ' + platform.icon + ' ' + platform.label;
+
+            const badges = badgeContainer.querySelectorAll('span');
+            badges.forEach(badge => {
+                const p = badge.dataset.platform;
+                if (p === platformKey) {
+                    badge.classList.add('active-badge');
+                } else {
+                    badge.classList.remove('active-badge');
+                }
+            });
+
+            const menuItems = dropdown.querySelectorAll('a[data-platform]');
+            menuItems.forEach(item => {
+                if (item.dataset.platform === platformKey) {
+                    item.classList.add('active-platform');
+                } else {
+                    item.classList.remove('active-platform');
+                }
+            });
+
+            linkInput.value = '';
+        }
+
+        function isValidLink(link) {
+            const platform = platforms[currentPlatform];
+            if (!platform) return false;
+            return platform.domains.some(domain => link.includes(domain));
+        }
+
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            dropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) {
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('open');
+            }
+        });
+
+        dropdown.querySelectorAll('a[data-platform]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const platform = this.dataset.platform;
+                setPlatform(platform);
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('open');
+            });
+        });
+
+        dropdown.querySelectorAll('a[href="#about"], a[href="#contact"]').forEach(item => {
+            item.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('open');
+            });
+        });
+
+        badgeContainer.querySelectorAll('span').forEach(badge => {
+            badge.addEventListener('click', function() {
+                const platform = this.dataset.platform;
+                if (platform) {
+                    setPlatform(platform);
+                }
+            });
+        });
+
+        pasteBtn.addEventListener('click', async function() {
+            try {
+                const text = await navigator.clipboard.readText();
+                linkInput.value = text;
+            } catch (err) {
+                alert('Unable to paste from clipboard. Please paste manually.');
+            }
+        });
+
+        downloadBtn.addEventListener('click', function() {
+            const link = linkInput.value.trim();
+
+            if (!link) {
+                alert('❌ Please paste a link first.');
+                return;
+            }
+
+            const platform = platforms[currentPlatform];
+            if (!platform) {
+                alert('❌ Please select a platform first.');
+                return;
+            }
+
+            if (!isValidLink(link)) {
+                alert(
+                    '❌ This link does not match the selected platform.\n\n' +
+                    'Selected: ' + platform.icon + ' ' + platform.label + '\n' +
+                    'Please paste a valid ' + platform.label + ' link.\n\n' +
+                    'Example: ' + platform.placeholder
+                );
+                return;
+            }
+
+            const downloadUrl = platform.downloadUrl(link);
+            window.open(downloadUrl, '_blank');
+        });
+
+        setPlatform('youtube');
+    </script>
+
+</body>
+</html>
