@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>savefity.net</title>
     <style>
-        /* ... same CSS as before ... */
         * {
             margin: 0;
             padding: 0;
@@ -196,10 +195,6 @@
         .link-box .download-btn:hover {
             background-color: #1557b0;
         }
-        .link-box .download-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
         .about-section {
             max-width: 600px;
             margin: 20px auto 40px auto;
@@ -302,27 +297,6 @@
             text-decoration: underline;
             font-weight: 500;
         }
-        .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            margin: 0 auto 10px auto;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #1a73e8;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        .spinner.show {
-            display: block;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
         @media (max-width: 480px) {
             .site-name {
                 font-size: 18px;
@@ -361,7 +335,6 @@
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
     <header class="top-header">
         <a href="#" class="site-name">savefity.net</a>
         <div class="header-right">
@@ -383,7 +356,6 @@
         </div>
     </header>
 
-    <!-- ===== LINK BOX ===== -->
     <div class="link-box" id="home">
         <label for="linkInput">Paste your video link here</label>
         <span class="selected-platform-label" id="selectedPlatformLabel">📌 Selected: YouTube</span>
@@ -399,12 +371,10 @@
             <button class="paste-btn" id="pasteBtn">📋 Paste</button>
             <button class="download-btn" id="downloadBtn">⬇ Download</button>
         </div>
-        <div class="spinner" id="loadingSpinner"></div>
         <div class="error-msg" id="errorMsg"></div>
-        <div class="success-msg" id="successMsg">✅ Download link generated! Click below to save.</div>
+        <div class="success-msg" id="successMsg">✅ Opening download site...</div>
     </div>
 
-    <!-- ===== ABOUT & CONTACT ===== -->
     <div class="about-section" id="about">
         <h2>About savefity.net</h2>
         <p>This tool helps you download videos from social media platforms quickly. Paste the link and save directly.</p>
@@ -422,41 +392,42 @@
     </div>
 
     <script>
-        // ============================================================
-        // 🔥 CODE UPDATE: Y2MATE COMPLETELY REMOVED
-        // ✅ NOW USING COBALT API (NO REDIRECT, NO ADS, NO NETWORK ERROR)
-        // ============================================================
-
+        // ---------- Platform Data (only redirect URLs - NO API) ----------
         const platforms = {
             youtube: {
                 label: 'YouTube',
                 icon: '▶️',
                 placeholder: 'https://youtube.com/watch?v=...',
-                domains: ['youtube.com', 'youtu.be']
+                domains: ['youtube.com', 'youtu.be'],
+                redirectUrl: (link) => 'https://www.y2mate.com/search/' + encodeURIComponent(link)
             },
             tiktok: {
                 label: 'TikTok',
                 icon: '📱',
                 placeholder: 'https://tiktok.com/@username/video/...',
-                domains: ['tiktok.com']
+                domains: ['tiktok.com'],
+                redirectUrl: (link) => 'https://ssstik.io/en?url=' + encodeURIComponent(link)
             },
             instagram: {
                 label: 'Instagram',
                 icon: '📸',
                 placeholder: 'https://instagram.com/p/...',
-                domains: ['instagram.com']
+                domains: ['instagram.com'],
+                redirectUrl: (link) => 'https://snapinsta.app/' + encodeURIComponent(link)
             },
             facebook: {
                 label: 'Facebook',
                 icon: '📘',
                 placeholder: 'https://facebook.com/watch/...',
-                domains: ['facebook.com', 'fb.watch']
+                domains: ['facebook.com', 'fb.watch'],
+                redirectUrl: (link) => 'https://getfvid.com/downloader?url=' + encodeURIComponent(link)
             },
             twitter: {
                 label: 'Twitter',
                 icon: '🐦',
                 placeholder: 'https://twitter.com/...',
-                domains: ['twitter.com', 'x.com']
+                domains: ['twitter.com', 'x.com'],
+                redirectUrl: (link) => 'https://twdown.net/download.php?url=' + encodeURIComponent(link)
             }
         };
 
@@ -471,7 +442,6 @@
         const badgeContainer = document.getElementById('badgeContainer');
         const errorMsg = document.getElementById('errorMsg');
         const successMsg = document.getElementById('successMsg');
-        const loadingSpinner = document.getElementById('loadingSpinner');
 
         function showError(msg) {
             errorMsg.textContent = msg;
@@ -481,9 +451,10 @@
         }
 
         function showSuccess(msg) {
-            successMsg.textContent = msg || '✅ Download link generated! Click below to save.';
+            successMsg.textContent = msg || '✅ Opening download site...';
             successMsg.classList.add('show');
             errorMsg.classList.remove('show');
+            setTimeout(() => successMsg.classList.remove('show'), 5000);
         }
 
         function setPlatform(platformKey) {
@@ -510,46 +481,50 @@
             return platform.domains.some(domain => link.toLowerCase().includes(domain.toLowerCase()));
         }
 
-        // =============================================================
-        // 🔥 NEW FUNCTION: COBALT API (NO Y2MATE)
-        // =============================================================
-        async function fetchCobaltDownload(link) {
-            const requestBody = {
-                url: link,
-                videoQuality: '1080',
-                audioFormat: 'best',
-                downloadMode: 'auto'
-            };
+        // ---------- Open redirect with fallback ----------
+        function openRedirect(url) {
+            // Remove old manual link
+            document.querySelector('.manual-link-fallback')?.remove();
 
-            // ✅ Yeh COBALT API hai, Y2MATE nahi!
-            const response = await fetch('https://cobalt.tools/api/json', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Cobalt API error: ${response.status} - ${errorText}`);
+            try {
+                // Try to open in new tab using anchor click (most reliable)
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showSuccess('✅ Opening download site...');
+            } catch (e) {
+                // Fallback: window.open
+                try {
+                    const win = window.open(url, '_blank');
+                    if (!win || win.closed) {
+                        showError('⚠️ Pop-up blocked! Please allow pop-ups or click the link below.');
+                        showManualLink(url);
+                    } else {
+                        showSuccess('✅ Opening download site...');
+                    }
+                } catch (err) {
+                    showError('❌ Unable to open. Please use the link below.');
+                    showManualLink(url);
+                }
             }
-
-            const data = await response.json();
-            if (data.status === 'error') {
-                throw new Error(data.text || 'Unknown error from Cobalt');
-            }
-            if (data.url) {
-                return data.url;
-            }
-            throw new Error('No download URL received from Cobalt');
         }
 
-        // =============================================================
-        // DOWNLOAD BUTTON
-        // =============================================================
-        downloadBtn.addEventListener('click', async function() {
+        function showManualLink(url) {
+            const div = document.createElement('div');
+            div.className = 'manual-link-fallback';
+            div.innerHTML = `
+                        <strong>🔗 Click to open manually:</strong><br>
+                        <a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>
+                    `;
+            downloadBtn.parentNode.appendChild(div);
+        }
+
+        // ---------- Download Button ----------
+        downloadBtn.addEventListener('click', function() {
             document.querySelector('.manual-link-fallback')?.remove();
             errorMsg.classList.remove('show');
             successMsg.classList.remove('show');
@@ -566,22 +541,29 @@
                 return;
             }
 
-            loadingSpinner.classList.add('show');
-            downloadBtn.disabled = true;
-            downloadBtn.textContent = '⏳ Processing...';
+            const platform = platforms[currentPlatform];
+            const redirectUrl = platform.redirectUrl(link);
+            openRedirect(redirectUrl);
+        });
 
-            try {
-                // ✅ Calling Cobalt API (not Y2mate)
-                const directUrl = await fetchCobaltDownload(link);
-                showSuccess('✅ Download link ready!');
-
-                // Auto-download
-                const a = document.createElement('a');
-                a.href = directUrl;
-                a.target = '_blank';
-                a.download = 'video.mp4';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-
-            } catch (error)
+        // ---------- Event Listeners ----------
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            dropdown.classList.toggle('open');
+        });
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) {
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('open');
+            }
+        });
+        dropdown.querySelectorAll('a[data-platform]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                setPlatform(this.dataset.platform);
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('open');
+            });
+        });
+     
