@@ -335,6 +335,7 @@
 </head>
 <body>
 
+    <!-- HEADER -->
     <header class="top-header">
         <a href="#" class="site-name">savefity.net</a>
         <div class="header-right">
@@ -356,6 +357,7 @@
         </div>
     </header>
 
+    <!-- MAIN BOX -->
     <div class="link-box" id="home">
         <label for="linkInput">Paste your video link here</label>
         <span class="selected-platform-label" id="selectedPlatformLabel">📌 Selected: YouTube</span>
@@ -375,6 +377,7 @@
         <div class="success-msg" id="successMsg">✅ Opening download site...</div>
     </div>
 
+    <!-- ABOUT -->
     <div class="about-section" id="about">
         <h2>About savefity.net</h2>
         <p>This tool helps you download videos from social media platforms quickly. Paste the link and save directly.</p>
@@ -382,6 +385,8 @@
             <span>▶️ YouTube</span><span>📱 TikTok</span><span>📸 Instagram</span><span>📘 Facebook</span><span>🐦 Twitter</span>
         </div>
     </div>
+
+    <!-- CONTACT -->
     <div class="about-section" id="contact" style="margin-top:0;">
         <h2>📧 Contact Us</h2>
         <p>Reach out to us at:</p>
@@ -392,7 +397,7 @@
     </div>
 
     <script>
-        // ---------- Platform Data (only redirect URLs - NO API) ----------
+        // ---------- PLATFORM DATA ----------
         const platforms = {
             youtube: {
                 label: 'YouTube',
@@ -454,7 +459,7 @@
             successMsg.textContent = msg || '✅ Opening download site...';
             successMsg.classList.add('show');
             errorMsg.classList.remove('show');
-            setTimeout(() => successMsg.classList.remove('show'), 5000);
+            setTimeout(() => successMsg.classList.remove('show'), 4000);
         }
 
         function setPlatform(platformKey) {
@@ -481,13 +486,12 @@
             return platform.domains.some(domain => link.toLowerCase().includes(domain.toLowerCase()));
         }
 
-        // ---------- Open redirect with fallback ----------
+        // ---------- REDIRECT FUNCTION ----------
         function openRedirect(url) {
-            // Remove old manual link
             document.querySelector('.manual-link-fallback')?.remove();
 
+            // Try anchor click first (most reliable)
             try {
-                // Try to open in new tab using anchor click (most reliable)
                 const a = document.createElement('a');
                 a.href = url;
                 a.target = '_blank';
@@ -496,6 +500,7 @@
                 a.click();
                 document.body.removeChild(a);
                 showSuccess('✅ Opening download site...');
+                return;
             } catch (e) {
                 // Fallback: window.open
                 try {
@@ -523,7 +528,7 @@
             downloadBtn.parentNode.appendChild(div);
         }
 
-        // ---------- Download Button ----------
+        // ---------- DOWNLOAD BUTTON ----------
         downloadBtn.addEventListener('click', function() {
             document.querySelector('.manual-link-fallback')?.remove();
             errorMsg.classList.remove('show');
@@ -546,7 +551,7 @@
             openRedirect(redirectUrl);
         });
 
-        // ---------- Event Listeners ----------
+        // ---------- EVENT LISTENERS ----------
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
             this.classList.toggle('active');
@@ -566,4 +571,3 @@
                 dropdown.classList.remove('open');
             });
         });
-     
