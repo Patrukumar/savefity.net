@@ -1,341 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a73e8">
     <title>savefity.net</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-        }
-        .top-header {
-            background-color: #1a73e8;
-            padding: 14px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            border-bottom: 3px solid #0d47a1;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .site-name {
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-        }
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 22px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .hamburger:hover {
-            transform: scale(1.1);
-        }
-        .hamburger .line {
-            width: 100%;
-            height: 3.5px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .hamburger.active .line:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        .hamburger.active .line:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.active .line:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 55px;
-            right: 0;
-            background: #ffffff;
-            min-width: 200px;
-            border-radius: 10px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-            padding: 10px 0;
-            z-index: 999;
-            border: 1px solid #e0e0e0;
-        }
-        .dropdown-menu.open {
-            display: block;
-        }
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 20px;
-            color: #333;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: background 0.2s ease;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-        }
-        .dropdown-menu a:last-child {
-            border-bottom: none;
-        }
-        .dropdown-menu a:hover {
-            background: #f1f5f9;
-            color: #1a73e8;
-        }
-        .dropdown-menu a.active-platform {
-            background: #1a73e8;
-            color: #ffffff;
-            font-weight: 600;
-        }
-        .dropdown-menu a.active-platform:hover {
-            background: #1557b0;
-        }
-        .dropdown-menu .menu-divider {
-            height: 1px;
-            background: #e0e0e0;
-            margin: 6px 0;
-        }
-        .link-box {
-            max-width: 600px;
-            margin: 40px auto 20px auto;
-            padding: 20px 25px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e0e0e0;
-            text-align: center;
-        }
-        .link-box label {
-            display: block;
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        .link-box .selected-platform-label {
-            display: block;
-            font-size: 14px;
-            color: #1a73e8;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-        .link-box input[type="url"] {
-            width: 100%;
-            padding: 14px 18px;
-            font-size: 16px;
-            border: 2px solid #d0d0d0;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.3s ease;
-            background: #fafafa;
-            margin-bottom: 15px;
-        }
-        .link-box input[type="url"]:focus {
-            border-color: #1a73e8;
-            background: #ffffff;
-        }
-        .link-box input[type="url"]::placeholder {
-            color: #999;
-            font-size: 14px;
-        }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .link-box .paste-btn {
-            width: 100%;
-            padding: 10px 18px;
-            background-color: #34a853;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .link-box .paste-btn:hover {
-            background-color: #2d8e47;
-        }
-        .link-box .download-btn {
-            width: 100%;
-            padding: 10px 18px;
-            background-color: #1a73e8;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .link-box .download-btn:hover {
-            background-color: #1557b0;
-        }
-        .about-section {
-            max-width: 600px;
-            margin: 20px auto 40px auto;
-            padding: 20px 25px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e0e0e0;
-            text-align: center;
-        }
-        .about-section h2 {
-            font-size: 20px;
-            color: #1a73e8;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        .about-section p {
-            font-size: 15px;
-            color: #555;
-            line-height: 1.6;
-            margin: 0;
-        }
-        .supported-badges {
-            margin-top: 12px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-        .supported-badges span {
-            background: #e8f0fe;
-            color: #1a73e8;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .supported-badges span:hover {
-            transform: scale(1.05);
-        }
-        .supported-badges span.active-badge {
-            background: #1a73e8;
-            color: #ffffff;
-        }
-        .contact-detail {
-            margin-top: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a73e8;
-        }
-        .contact-detail-small {
-            margin-top: 6px;
-            font-size: 15px;
-            color: #555;
-        }
-        .contact-sub {
-            margin-top: 4px;
-            font-size: 14px;
-            color: #888;
-        }
-        .error-msg {
-            color: #d32f2f;
-            background: #ffebee;
-            padding: 10px;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-size: 14px;
-            display: none;
-            border-left: 4px solid #d32f2f;
-        }
-        .error-msg.show {
-            display: block;
-        }
-        .success-msg {
-            color: #155724;
-            background: #d4edda;
-            padding: 10px;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-size: 14px;
-            display: none;
-            border-left: 4px solid #28a745;
-        }
-        .success-msg.show {
-            display: block;
-        }
-        .manual-link-fallback {
-            margin-top: 12px;
-            padding: 10px;
-            background: #e3f2fd;
-            border-radius: 6px;
-            font-size: 13px;
-            word-break: break-all;
-            border: 1px solid #1a73e8;
-        }
-        .manual-link-fallback a {
-            color: #1a73e8;
-            text-decoration: underline;
-            font-weight: 500;
-        }
-        @media (max-width: 480px) {
-            .site-name {
-                font-size: 18px;
-            }
-            .hamburger {
-                width: 26px;
-                height: 19px;
-            }
-            .hamburger .line {
-                height: 3px;
-            }
-            .link-box,
-            .about-section {
-                margin-left: 15px;
-                margin-right: 15px;
-                padding: 15px 18px;
-            }
-            .dropdown-menu {
-                min-width: 170px;
-                right: 0;
-                top: 48px;
-            }
-            .dropdown-menu a {
-                font-size: 14px;
-                padding: 8px 16px;
-            }
-            .supported-badges span {
-                font-size: 11px;
-                padding: 3px 10px;
-            }
-            .contact-detail {
-                font-size: 15px;
-            }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { width: 100%; overflow-x: hidden; text-size-adjust: 100%; }
+        body { width: 100%; max-width: 100vw; overflow-x: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; font-size: 16px; line-height: 1.5; }
+
+        /* ===== HEADER ===== */
+        .top-header { background-color: #1a73e8; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); border-bottom: 3px solid #0d47a1; position: sticky; top: 0; z-index: 1000; width: 100%; }
+        .site-name { color: #ffffff; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; white-space: nowrap; }
+        .header-right { display: flex; align-items: center; gap: 10px; position: relative; }
+        .hamburger { display: flex; flex-direction: column; justify-content: space-between; width: 26px; height: 19px; cursor: pointer; }
+        .hamburger .line { width: 100%; height: 3px; background-color: #ffffff; border-radius: 10px; transition: all 0.3s ease; }
+        .hamburger.active .line:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active .line:nth-child(2) { opacity: 0; }
+        .hamburger.active .line:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .dropdown-menu { display: none; position: absolute; top: 48px; right: 0; background: #ffffff; min-width: 190px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); padding: 8px 0; z-index: 999; border: 1px solid #e0e0e0; }
+        .dropdown-menu.open { display: block; }
+        .dropdown-menu a { display: block; padding: 11px 18px; color: #333; text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .dropdown-menu a:last-child { border-bottom: none; }
+        .dropdown-menu a:hover { background: #f1f5f9; color: #1a73e8; }
+
+        /* ===== LINK BOX ===== */
+        .link-box { width: calc(100% - 24px); max-width: 550px; margin: 20px auto 15px auto; padding: 18px 15px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e0e0e0; text-align: center; }
+        .link-box label { display: block; font-size: 15px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .link-box input[type="url"] { width: 100%; padding: 12px 14px; font-size: 16px; border: 2px solid #d0d0d0; border-radius: 8px; outline: none; background: #fafafa; margin-bottom: 15px; font-family: inherit; }
+        .link-box input[type="url"]:focus { border-color: #1a73e8; background: #ffffff; }
+        .btn-group { display: flex; gap: 8px; justify-content: center; align-items: center; flex-direction: column; }
+        .link-box .paste-btn, .link-box .download-btn { width: 100%; padding: 12px 18px; color: #ffffff; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+        .link-box .paste-btn { background-color: #34a853; }
+        .link-box .download-btn { background-color: #1a73e8; }
+
+        /* ===== ABOUT / CONTACT ===== */
+        .about-section { width: calc(100% - 24px); max-width: 550px; margin: 15px auto 25px auto; padding: 18px 15px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e0e0e0; text-align: center; }
+        .about-section h2 { font-size: 17px; color: #1a73e8; margin-bottom: 10px; font-weight: 600; }
+        .about-section p { font-size: 13px; color: #555; line-height: 1.6; margin: 0; }
+        .contact-detail { margin-top: 10px; font-size: 14px; font-weight: 600; color: #1a73e8; word-break: break-all; }
+
+        /* ===== MESSAGES ===== */
+        .error-msg { color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 12px; display: none; border-left: 4px solid #d32f2f; text-align: left; }
+        .success-msg { color: #155724; background: #d4edda; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 12px; display: none; border-left: 4px solid #28a745; text-align: left; }
+        .error-msg.show, .success-msg.show { display: block; }
+
+        /* ===== DESKTOP ===== */
+        @media (min-width: 481px) {
+            .top-header { padding: 14px 25px; }
+            .site-name { font-size: 22px; }
+            .link-box, .about-section { padding: 20px 25px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <header class="top-header">
         <a href="#" class="site-name">savefity.net</a>
         <div class="header-right">
@@ -345,30 +65,15 @@
                 <span class="line"></span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="#" data-platform="youtube">▶️ YouTube</a>
-                <a href="#" data-platform="tiktok">📱 TikTok</a>
-                <a href="#" data-platform="instagram">📸 Instagram</a>
-                <a href="#" data-platform="facebook">📘 Facebook</a>
-                <a href="#" data-platform="twitter">🐦 Twitter</a>
-                <div class="menu-divider"></div>
                 <a href="#about">ℹ️ About</a>
                 <a href="#contact">📧 Contact</a>
             </div>
         </div>
     </header>
 
-    <!-- MAIN BOX -->
     <div class="link-box" id="home">
-        <label for="linkInput">Paste your video link here</label>
-        <span class="selected-platform-label" id="selectedPlatformLabel">📌 Selected: YouTube</span>
+        <label for="linkInput">Paste your YouTube link here</label>
         <input type="url" id="linkInput" placeholder="https://youtube.com/watch?v=..." />
-        <div class="supported-badges" id="badgeContainer">
-            <span class="active-badge" data-platform="youtube">▶️ YouTube</span>
-            <span data-platform="tiktok">📱 TikTok</span>
-            <span data-platform="instagram">📸 Instagram</span>
-            <span data-platform="facebook">📘 Facebook</span>
-            <span data-platform="twitter">🐦 Twitter</span>
-        </div>
         <div class="btn-group">
             <button class="paste-btn" id="pasteBtn">📋 Paste</button>
             <button class="download-btn" id="downloadBtn">⬇ Download</button>
@@ -377,74 +82,23 @@
         <div class="success-msg" id="successMsg">✅ Opening download site...</div>
     </div>
 
-    <!-- ABOUT -->
     <div class="about-section" id="about">
         <h2>About savefity.net</h2>
-        <p>This tool helps you download videos from social media platforms quickly. Paste the link and save directly.</p>
-        <div class="supported-badges">
-            <span>▶️ YouTube</span><span>📱 TikTok</span><span>📸 Instagram</span><span>📘 Facebook</span><span>🐦 Twitter</span>
-        </div>
+        <p>This tool helps you download videos from YouTube quickly. Paste the link and save directly to your device.</p>
     </div>
 
-    <!-- CONTACT -->
     <div class="about-section" id="contact" style="margin-top:0;">
         <h2>📧 Contact Us</h2>
-        <p>Reach out to us at:</p>
-        <div class="contact-detail">📧 <strong>axionorvex@gmail.com</strong></div>
-        <div class="contact-detail" style="margin-top:6px; font-size:17px;">📧 <strong>patrukumar2008@gmail.com</strong></div>
-        <div class="contact-detail-small">📸 Instagram: <strong style="color:#1a73e8;">@callmepatru</strong></div>
-        <div class="contact-sub">(We'll get back to you within 24 hours)</div>
+        <p>Have questions or suggestions? Reach out to us at:</p>
+        <div class="contact-detail">📧 <strong>growwithsahani@gmail.com</strong></div>
     </div>
 
     <script>
-        // ---------- PLATFORM DATA ----------
-        const platforms = {
-            youtube: {
-                label: 'YouTube',
-                icon: '▶️',
-                placeholder: 'https://youtube.com/watch?v=...',
-                domains: ['youtube.com', 'youtu.be'],
-                redirectUrl: (link) => 'https://www.y2mate.com/search/' + encodeURIComponent(link)
-            },
-            tiktok: {
-                label: 'TikTok',
-                icon: '📱',
-                placeholder: 'https://tiktok.com/@username/video/...',
-                domains: ['tiktok.com'],
-                redirectUrl: (link) => 'https://ssstik.io/en?url=' + encodeURIComponent(link)
-            },
-            instagram: {
-                label: 'Instagram',
-                icon: '📸',
-                placeholder: 'https://instagram.com/p/...',
-                domains: ['instagram.com'],
-                redirectUrl: (link) => 'https://snapinsta.app/' + encodeURIComponent(link)
-            },
-            facebook: {
-                label: 'Facebook',
-                icon: '📘',
-                placeholder: 'https://facebook.com/watch/...',
-                domains: ['facebook.com', 'fb.watch'],
-                redirectUrl: (link) => 'https://getfvid.com/downloader?url=' + encodeURIComponent(link)
-            },
-            twitter: {
-                label: 'Twitter',
-                icon: '🐦',
-                placeholder: 'https://twitter.com/...',
-                domains: ['twitter.com', 'x.com'],
-                redirectUrl: (link) => 'https://twdown.net/download.php?url=' + encodeURIComponent(link)
-            }
-        };
-
-        let currentPlatform = 'youtube';
-
         const linkInput = document.getElementById('linkInput');
         const downloadBtn = document.getElementById('downloadBtn');
         const pasteBtn = document.getElementById('pasteBtn');
         const hamburger = document.getElementById('menuToggle');
         const dropdown = document.getElementById('dropdownMenu');
-        const selectedLabel = document.getElementById('selectedPlatformLabel');
-        const badgeContainer = document.getElementById('badgeContainer');
         const errorMsg = document.getElementById('errorMsg');
         const successMsg = document.getElementById('successMsg');
 
@@ -462,112 +116,86 @@
             setTimeout(() => successMsg.classList.remove('show'), 4000);
         }
 
-        function setPlatform(platformKey) {
-            currentPlatform = platformKey;
-            const platform = platforms[platformKey];
-            if (!platform) return;
-            linkInput.placeholder = platform.placeholder;
-            selectedLabel.textContent = '📌 Selected: ' + platform.icon + ' ' + platform.label;
-            badgeContainer.querySelectorAll('span').forEach(badge => {
-                badge.classList.toggle('active-badge', badge.dataset.platform === platformKey);
-            });
-            dropdown.querySelectorAll('a[data-platform]').forEach(item => {
-                item.classList.toggle('active-platform', item.dataset.platform === platformKey);
-            });
-            linkInput.value = '';
-            errorMsg.classList.remove('show');
-            successMsg.classList.remove('show');
-            document.querySelector('.manual-link-fallback')?.remove();
+        function isValidYouTubeLink(link) {
+            return link.toLowerCase().includes('youtube.com') || link.toLowerCase().includes('youtu.be');
         }
 
-        function isValidLink(link) {
-            const platform = platforms[currentPlatform];
-            if (!platform) return false;
-            return platform.domains.some(domain => link.toLowerCase().includes(domain.toLowerCase()));
-        }
-
-        // ---------- REDIRECT FUNCTION ----------
+        // WebView friendly redirect
         function openRedirect(url) {
-            document.querySelector('.manual-link-fallback')?.remove();
-
-            // Try anchor click first (most reliable)
             try {
-                const a = document.createElement('a');
-                a.href = url;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                window.location.href = url;
                 showSuccess('✅ Opening download site...');
-                return;
             } catch (e) {
-                // Fallback: window.open
-                try {
-                    const win = window.open(url, '_blank');
-                    if (!win || win.closed) {
-                        showError('⚠️ Pop-up blocked! Please allow pop-ups or click the link below.');
-                        showManualLink(url);
-                    } else {
-                        showSuccess('✅ Opening download site...');
-                    }
-                } catch (err) {
-                    showError('❌ Unable to open. Please use the link below.');
-                    showManualLink(url);
-                }
+                showError('❌ Unable to open. Please try again.');
             }
         }
 
-        function showManualLink(url) {
-            const div = document.createElement('div');
-            div.className = 'manual-link-fallback';
-            div.innerHTML = `
-                        <strong>🔗 Click to open manually:</strong><br>
-                        <a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>
-                    `;
-            downloadBtn.parentNode.appendChild(div);
-        }
-
-        // ---------- DOWNLOAD BUTTON ----------
         downloadBtn.addEventListener('click', function() {
-            document.querySelector('.manual-link-fallback')?.remove();
             errorMsg.classList.remove('show');
             successMsg.classList.remove('show');
 
             const link = linkInput.value.trim();
             if (!link) {
-                showError('❌ Please paste a link first.');
+                showError('❌ Please paste a YouTube link first.');
                 return;
             }
-            if (!isValidLink(link)) {
-                const platform = platforms[currentPlatform];
-                showError('❌ This link does not match the selected platform.\n\nSelected: ' + platform.icon + ' ' +
-                    platform.label + '\nExample: ' + platform.placeholder);
+            if (!isValidYouTubeLink(link)) {
+                showError('❌ Please paste a valid YouTube link.');
                 return;
             }
 
-            const platform = platforms[currentPlatform];
-            const redirectUrl = platform.redirectUrl(link);
+            const redirectUrl = 'https://www.y2mate.com/search/' + encodeURIComponent(link);
             openRedirect(redirectUrl);
         });
 
-        // ---------- EVENT LISTENERS ----------
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
             this.classList.toggle('active');
             dropdown.classList.toggle('open');
         });
+
         document.addEventListener('click', function(e) {
             if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) {
                 hamburger.classList.remove('active');
                 dropdown.classList.remove('open');
             }
         });
-        dropdown.querySelectorAll('a[data-platform]').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                setPlatform(this.dataset.platform);
+
+        dropdown.querySelectorAll('a[href="#about"]').forEach(item => {
+            item.addEventListener('click', function() {
                 hamburger.classList.remove('active');
                 dropdown.classList.remove('open');
+                document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
             });
         });
+
+        dropdown.querySelectorAll('a[href="#contact"]').forEach(item => {
+            item.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('open');
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        pasteBtn.addEventListener('click', async function() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    linkInput.value = text;
+                    errorMsg.classList.remove('show');
+                    successMsg.classList.remove('show');
+                } else {
+                    showError('⚠️ Clipboard is empty.');
+                }
+            } catch {
+                showError('⚠️ Unable to access clipboard. Please paste manually.');
+                linkInput.focus();
+            }
+        });
+
+        linkInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') downloadBtn.click();
+        });
+    </script>
+</body>
+</html>
