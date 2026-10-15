@@ -1,1 +1,44 @@
+const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
+const app = express();
 
+// CORS enable - taaki GitHub Pages wali website isse connect kar sake
+app.use(cors());
+app.use(express.json());
+
+// Download endpoint
+app.post('/download', async (req, res) => {
+    const { url } = req.body;
+
+    if (!url) {
+        return res.status(400).json({ error: 'YouTube link required' });
+    }
+
+    try {
+        const response = await axios.post('https://api.cobalt.tools/', {
+            url: url,
+            videoQuality: '1080',
+            downloadMode: 'auto'
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+
+        res.json(response.data);
+
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ error: 'Download link generate nahi ho paya' });
+    }
+});
+
+// Home route (test ke liye)
+app.get('/', (req, res) => {
+    res.send('Savefity Backend is running! ✅');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
